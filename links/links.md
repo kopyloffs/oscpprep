@@ -3,6 +3,7 @@
 ### Windows
 #### Privilege Escalation
 * [Privilege Escalation Fundamentals](http://www.fuzzysecurity.com/tutorials/16.html)
+
 #### Service Manipulation
 * [Privilege Escalation Fundamentals](http://www.fuzzysecurity.com/tutorials/16.html)
 
