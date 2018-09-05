@@ -1,8 +1,7 @@
-# tools
+# Tools Repository
+This repo contains a collection of resources, code, and prebuilt tools for use with conducting pentests
 
-# links
-## Windows
-[Privilege Escalation Fundamentals](http://www.fuzzysecurity.com/tutorials/16.html)
+The respources are as follows:
 
-## Metasploit
-[Creating Payloads](https://netsec.ws/?p=331)
+[Links](/links) - Contains a collection of orginized links to aid in learning, researching, and exploiting
+[exploits](/exploits) - Contains exploits that have been modified or are known to work by producing shells, etc..
