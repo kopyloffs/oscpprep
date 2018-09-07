@@ -1,0 +1,69 @@
+======================================= REG COMMANDS FROM COMMAND LINE =================================================
+
+    REG Query
+    REG Add
+    REG Delete
+    REG Copy
+    REG Save
+    REG Load
+    REG Unload
+    REG Restore
+    REG Compare
+    REG Export
+    REG Import
+    REG Flags
+
+============================================= OS INFORMATION =================================================
+Version Number: 	Operating System:
+5.0 	Windows 2000
+5.1 	Windows XP
+5.2 	Windows XP 64bit
+5.2 	Windows Server 2003 / R2
+6.0 	Windows Vista / Windows Server 2008
+6.1 	Windows 7 / Windows Server 2008 R2
+6.2 	Windows 8 / Windows Server 2012
+6.3 	Windows 8.1 / Windows Server 2012 R2
+10.0 	Windows 10 (Preview)
+
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentVersion 
+
+============================================= PRODUCT NAME =================================================
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v ProductName
+
+
+============================================= INSTALATION DATE =================================================
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v Installdate
+systeminfo|find /i "original"
+
+============================================= REGISTERED OWNER =================================================
+reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v rEGISTEREDoWNER
+
+============================================= SYSTEM ROOT =================================================
+reg query "HKLM\System\CurrentControlSet\Control\TimeZoneInformation" /v TimeZoneKeyName
+
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\TimeZoneInformation
+    TimeZoneKeyName    REG_SZ    Central European Standard Time
+    
+============================================= WALLPAPER =================================================
+reg query "HKCU\Control Panel\Desktop" /v Wallpaper
+
+HKEY_CURRENT_USER\Control Panel\Desktop
+    Wallpaper    REG_SZ    C:\Windows\web\wallpaper\Windows\img0.jpg
+    
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d E:\photos\image1.bmp /f
+/v       The value name, under the selected Key, to add.
+/t       RegKey data types (REG_SZ, REG_MULTI_SZ, REG_EXPAND_SZ, REG_DWORD, REG_QWORD, REG_BINARY, REG_NONE) If omitted, REG_SZ is assumed.
+/d       The data to assign to the registry ValueName being added.
+/f       Force overwriting the existing registry entry without prompt.
+
+============================================= MOUNTED DEVICES =================================================
+reg query "HKLM\System\MountedDevices"
+
+============================================= USB DEVICES =================================================
+reg query "HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR"
+
+============================================= TCP IP =================================================
+reg query HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v Hostname
+
+reg query HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters /v IPEnableRouter
+reg add " HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v IPEnableRouter /t REG_DWORD /d 0x1 /f

