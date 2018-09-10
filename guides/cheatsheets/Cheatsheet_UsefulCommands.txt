@@ -36,3 +36,6 @@ nmap -PN -d -p445 --script=smb-check-vulns --script-args=safe=1 IP-RANGES
 [+] fping only show alive hosts (useful for generating target list)
 
 fping -A -a -q -g -a -i 1 -r 0 <subnet>
+
+# Website Auth Bypass Commands
+* admin' or 1=1-- -
