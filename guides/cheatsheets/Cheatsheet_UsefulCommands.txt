@@ -43,3 +43,7 @@ fping -A -a -q -g -a -i 1 -r 0 <subnet>
 # Change version of java
 
 * update-alternatives --config java
+
+# Generate PNG's from video 
+
+* ffmpeg -i <video name> outputFile_%02d.png
