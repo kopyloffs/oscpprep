@@ -39,3 +39,7 @@ fping -A -a -q -g -a -i 1 -r 0 <subnet>
 
 # Website Auth Bypass Commands
 * admin' or 1=1-- -
+
+# Change version of java
+
+* update-alternatives --config java
