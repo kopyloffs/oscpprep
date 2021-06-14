@@ -1,1 +1,1 @@
-<script><?php echo md5(1) ?></script>
+<script>alert(`<?php echo md5(1) ?>`)</script>
