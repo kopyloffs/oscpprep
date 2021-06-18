@@ -1,6 +1,0 @@
-GIF89a
-<?php
-echo "<pre>";
-echo "AAAAAAAAAAARRRRRR";
-echo "</pre>";
-?>
